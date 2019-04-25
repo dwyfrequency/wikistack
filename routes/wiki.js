@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res, next) => {
   console.log(req.body);
   const body = req.body;
-  res.json(req.body);
+  res.json(req.body); // res.send and res.json are pretty much the same will render the page with json instead
   //res.send('req stuff');
 });
 

@@ -15,12 +15,8 @@ app.use('/user', require('./routes/user'));
 app.use('/wiki', require('./routes/wiki'));
 
 app.get('/', (req, res) => {
-  res.redirect('/');
+  res.send(views());
 });
-
-// app.get('/', (req, res) => {
-//   res.send(views());
-// });
 
 models.db.authenticate().then(() => {
   console.log('CONNECTED TO DB');
