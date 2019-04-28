@@ -5,9 +5,25 @@ const db = new Sequelize('postgres://localhost:5432/wikistack', {
 
 const Page = db.define('page', {
   title: { type: Sequelize.STRING, allowNull: false },
-  slug: { type: Sequelize.STRING, allowNull: false },
+  slug: { type: Sequelize.STRING, allowNull: false, unique: true },
   content: { type: Sequelize.TEXT, allowNull: false },
   status: { type: Sequelize.ENUM('open', 'closed') },
+  tags: {
+    type: Sequelize.ARRAY(Sequelize.TEXT),
+  },
+});
+
+Page.beforeValidate(page => {
+  /*
+   * Generate slug
+   */
+  if (!page.slug) {
+    page.slug = page.title
+      .replace(/\s/g, '_')
+      .replace(/\W/g, '')
+      .toLowerCase();
+  }
+  // page.tags = page.tags.split(', ');
 });
 
 const User = db.define('user', {

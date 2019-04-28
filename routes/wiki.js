@@ -1,17 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../models');
+const { Page } = require('../models');
 const { addPage, wikiPage } = require('../views');
 
 router.get('/', (req, res, next) => {
   // retrieve all wiki pages
-  // models.Page.
+
   res.send('got to GET /wiki/');
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   // submit a new page to the database
-  res.send('got to POST /wiki/');
+  const { title, content } = req.body;
+  let slug = generateSlug(title);
+  const page = new Page({
+    title,
+    content,
+    slug,
+  });
+
+  try {
+    await page.save();
+    res.redirect('/');
+  } catch (error) {
+    next(error);
+  }
+  res.json(req.body);
 });
 
 router.get('/add', (req, res, next) => {
